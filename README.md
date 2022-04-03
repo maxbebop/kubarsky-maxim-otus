@@ -1,1 +1,1 @@
-# kubarsky-maxim-otus
+# Kubarsky Maxim. Otus homeworks.
