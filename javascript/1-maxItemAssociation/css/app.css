@@ -1,0 +1,11 @@
+/*.coll{
+    float: left;
+    padding: 10px;
+}*/
+.container {
+    padding: 10px;
+}
+.container .coll {
+    float: left;
+    padding: 10px;
+}

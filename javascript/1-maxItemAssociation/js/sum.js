@@ -1,0 +1,42 @@
+const main = ((document)=>{
+
+    const makeAdder = () => {
+        let result = 0;
+        return (val) => {
+            if(val){
+                result += val;
+            } else {
+                return result;
+            }
+        }
+    }
+
+    function init(){
+        const refreshBtn = document.getElementById('refreshBtn');
+        refreshBtn.addEventListener('click',makeSumm);
+
+    }
+
+    function makeSumm(){
+        const adder = makeAdder();
+        const sumResult = document.getElementById('sumResult');
+        sumResult.textContent  = '';
+        let strRes = '';
+        for(let i = 0; i < 10; i++){
+            let val = Math.floor(Math.random() * 11);
+            strRes += `${val};`;
+            adder(val);
+        }
+        
+        strRes +=  ` summ: ${adder()};`;
+        sumResult.textContent  =strRes;  
+    }
+
+    function main(){      
+        init();
+        makeSumm();
+    }
+
+    return main;
+})(document);
+main();
