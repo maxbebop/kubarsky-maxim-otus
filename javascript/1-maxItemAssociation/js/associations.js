@@ -2,23 +2,15 @@ const associations = ((document)=>{
 
     const purchaseHistoryArr_1 = [['a','b','c'],['a','f'],['f','c','g','w'],['w','f'],['f','h'],['d']];
     const purchaseHistoryArr_2 =  [['a', 'b'], ['a', 'c'], ['d', 'e']];
-    const purchaseHistoryArr_3 = [
-        ['q', 'w', 'a'],
-        ['a', 'b'],
-        ['a', 'c'],
-        ['q', 'e'],
-        ['q', 'r'],
-        ];
+    const purchaseHistoryArr_3 = [['q', 'w', 'a'],['a', 'b'],['a', 'c'],['q', 'e'],['q', 'r'],];
 
-    const purchaseHistoryArr = purchaseHistoryArr_3;
+    const purchaseHistoryArr = purchaseHistoryArr_1;
 
-    function maxItemAssociation(buyerHistoryArr){
-        let associations = [];
-        let associationsArr = [];
+    function maxItemAssociation_v1(buyerHistoryArr){
+        let associations = [];        
         buyerHistoryArr.forEach(purchaseItem => {
             purchaseHistoryArr.forEach(historyItem => {
                 if(historyItem.includes(purchaseItem) && !associations.includes(historyItem)){
-                    associationsArr.push(historyItem);
                     historyItem.forEach(item => {
                         if (!associations.includes(item)) {
                             associations.push(item)
@@ -28,18 +20,18 @@ const associations = ((document)=>{
                 }
             });    
         });
-        console.table(associationsArr);
         return associations.sort();   
     }
-    
+
+
     function onSelectBuyerHistory(args){
         
         const recommendationsEl = getRecommendationsEl();
         const i = args.target.value - 1;
         if(i >= 0) {
             const buyerHistoryArr = purchaseHistoryArr[i];
-            const association = maxItemAssociation(buyerHistoryArr);
-            recommendationsEl.textContent = association.toString();
+            const association = maxItemAssociation_v1(buyerHistoryArr);
+            recommendationsEl.innerHTML = `v1: ${association.toString()}`;
             
         } else{
             recommendationsEl.textContent = '';
