@@ -2,7 +2,7 @@ const main = (()=>{
 
     let result = 0;
 
-    const summ = (val) => {
+    const sum = (val) => {
         if(val){
             result += val;
         } else {
@@ -10,19 +10,19 @@ const main = (()=>{
         }
     }
 
-    function makeSumm(){
+    function makeSum(){
         let strRes = '';
         for(let i = 0; i < 10; i++){
             let val = Math.floor(Math.random() * 11);
             strRes += `${val} `;
-            summ(val);
+            sum(val);
         }
         
-        console.log(`${strRes}: summ = ${summ()}`);
+        console.log(`${strRes}: sum = ${sum()}`);
     }
 
     function main(){      
-        makeSumm();
+        makeSum();
     }
 
     return main;

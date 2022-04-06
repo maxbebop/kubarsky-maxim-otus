@@ -3,7 +3,7 @@
     const purchaseHistoryArr_2 =  [['a', 'b'], ['a', 'c'], ['d', 'e','g']];
     const purchaseHistoryArr_3 = [['w', 'q', 'a'],['a', 'b'],['a', 'c'],['q', 'e'],['q', 'r'],];
 
-    const purchaseHistoryArr = purchaseHistoryArr_2;
+    const purchaseHistoryArr = purchaseHistoryArr_3;
 
     class Node {
         constructor(value){
@@ -27,23 +27,25 @@
     function maxItemAssociation(purchaseHistoryArr){
         let associationMap = createAssociationMap(purchaseHistoryArr);
         let associationArr = [];
+        console.log('associationMap 2');
         console.table(associationMap);
-        let maxLenght = 2;
+        let maxLength = 2;
         associationMap.forEach(item =>{
-            if(item.associations.length > maxLenght){
-                maxLenght = item.associations.length ;
+            if(item.associations.length > maxLength){
+                maxLength = item.associations.length ;
                 item.associations.sort();
             }
         });
 
         associationMap.forEach(item =>{
-            if(item.associations.length  === maxLenght){
+            if(item.associations.length  === maxLength){
                 associationArr.push(item.associations);
             }
         });
 
         associationArr.sort();
 
+        console.log('res');
         console.log(associationArr[0]);
         return associationArr[0];
     }
@@ -51,7 +53,9 @@
     
     function createAssociationMap(purchaseHistoryArr){
         let associationMap = createEmptyAssociationMap(purchaseHistoryArr);
+        console.log('purchaseHistoryArr');
         console.table(purchaseHistoryArr);
+        console.log('associationMap');
         console.table(associationMap);        
         
         purchaseHistoryArr.forEach(historyItem => {
