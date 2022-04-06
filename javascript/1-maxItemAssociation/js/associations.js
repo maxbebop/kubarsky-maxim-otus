@@ -1,96 +1,95 @@
-const associations = ((document)=>{
 
     const purchaseHistoryArr_1 = [['a','b','c'],['a','f'],['f','c','g','w'],['w','f'],['f','h'],['d']];
-    const purchaseHistoryArr_2 =  [['a', 'b'], ['a', 'c'], ['d', 'e']];
-    const purchaseHistoryArr_3 = [['q', 'w', 'a'],['a', 'b'],['a', 'c'],['q', 'e'],['q', 'r'],];
+    const purchaseHistoryArr_2 =  [['a', 'b'], ['a', 'c'], ['d', 'e','g']];
+    const purchaseHistoryArr_3 = [['w', 'q', 'a'],['a', 'b'],['a', 'c'],['q', 'e'],['q', 'r'],];
 
-    const purchaseHistoryArr = purchaseHistoryArr_1;
+    const purchaseHistoryArr = purchaseHistoryArr_2;
 
-    function maxItemAssociation_v1(buyerHistoryArr){
-        let associations = [];
-        buyerHistoryArr.forEach(purchaseItem => {
-            purchaseHistoryArr.forEach(historyItem => {
-                if(historyItem.includes(purchaseItem) && !associations.includes(historyItem)){
-                    historyItem.forEach(item => {
-                        if (!associations.includes(item) &&  !buyerHistoryArr.includes(item)) {
-                            associations.push(item)
-                        };
-                    });
-                    
-                }
-            });    
-        });
-        return associations.sort();   
-    }
+    class Node {
+        constructor(value){
+            this.value = value;
+            this.associations = [];
+            this.addAssociation(value);
+        }
 
+        addAssociation(value){
+            if(!this.associations.find(item => {return item === value})){
+                this.associations.push(value);
+            }
 
-    function onSelectBuyerHistory(args){
-        
-        const recommendationsEl = getRecommendationsEl();
-        const i = args.target.value - 1;
-        if(i >= 0) {
-            const buyerHistoryArr = purchaseHistoryArr[i];
-            const association = maxItemAssociation_v1(buyerHistoryArr);
-            recommendationsEl.innerHTML = `v1: ${association.toString()}`;
-            
-        } else{
-            recommendationsEl.textContent = '';
+        }
+
+        addAssociationArr(valueArr){
+            valueArr.forEach(value => this.addAssociation(value));
         }
     }
 
-    function createElement(tag, props, ...childList){
-        const element = document.createElement(tag);
-    
-        Object.keys(props).forEach(key => element[key] = props[key]);
-    
-        childList.forEach(item => element.appendChild(item));
-    
-        return element;
-    }
-
-    function getBuyerHistoryEl(){
-        return document.getElementById('buyerHistory');
-    }
-
-    function getRecommendationsEl(){
-        return document.getElementById('recommendations');
-    }
-
-    function getFullHistoryEl(){
-        return document.getElementById('fullHistory');
-    }
-
-    function initFullHistoryEl(){
-        const fullHistoryEl = getFullHistoryEl();
-
-        purchaseHistoryArr.forEach(item => {
-            const div = createElement('div', {textContent: item.toString()});
-            fullHistoryEl.appendChild(div);
-        });
-    }
-    function initBuyerHistoryEl(){
-        let i = 1;
-        let buyerHistory = getBuyerHistoryEl();
-        buyerHistory.appendChild(createDefaultBuyerHistoryVal());
-        purchaseHistoryArr.forEach(item => {
-            const option = createElement('option', {value: i, text: item.toString()});
-            buyerHistory.appendChild(option);
-            i++;
+    function maxItemAssociation(purchaseHistoryArr){
+        let associationMap = createAssociationMap(purchaseHistoryArr);
+        let associationArr = [];
+        console.table(associationMap);
+        let maxLenght = 2;
+        associationMap.forEach(item =>{
+            if(item.associations.length > maxLenght){
+                maxLenght = item.associations.length ;
+                item.associations.sort();
+            }
         });
 
-        buyerHistory.addEventListener('change', onSelectBuyerHistory);
+        associationMap.forEach(item =>{
+            if(item.associations.length  === maxLenght){
+                associationArr.push(item.associations);
+            }
+        });
+
+        associationArr.sort();
+
+        console.log(associationArr[0]);
+        return associationArr[0];
     }
 
-    function createDefaultBuyerHistoryVal(){
-        return createElement('option', {value: 0, text: '' });
-    }
-
-    function associations(){
-        initBuyerHistoryEl();
-        initFullHistoryEl();
-    }
     
-    return associations;
+    function createAssociationMap(purchaseHistoryArr){
+        let associationMap = createEmptyAssociationMap(purchaseHistoryArr);
+        console.table(purchaseHistoryArr);
+        console.table(associationMap);        
+        
+        purchaseHistoryArr.forEach(historyItem => {
+            let root = null;  
+            historyItem.forEach (item =>{
+                 if(!root){
+                    root  = associationMap.find(node => {return node.value === item});
+                 } else {
+                    root.addAssociation(item);
+                 }
+            });
+        });
 
-})(document);
-associations();
+        associationMap.forEach(rootNode => {
+            associationMap.forEach(node => {
+                if(node.value !== rootNode.value && node.associations.includes(rootNode.value) ){
+                    node.addAssociationArr(rootNode.associations);
+                }
+            });
+        });
+
+        return associationMap;
+    }
+
+    function createEmptyAssociationMap(purchaseHistoryArr){
+        let associationMap = [];
+
+        purchaseHistoryArr.forEach(historyItem => {
+            historyItem.forEach(item => {
+                let node = associationMap.find(node => {return node.value === item});
+                if(!node){
+                    node = new Node(item);
+                    associationMap.push(node);
+                }
+            });    
+        }); 
+       return associationMap;
+    }
+
+
+    maxItemAssociation(purchaseHistoryArr);
