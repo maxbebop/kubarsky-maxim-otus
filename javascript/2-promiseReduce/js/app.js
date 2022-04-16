@@ -20,16 +20,16 @@ function promiseReduce(asyncFunctions, reduce, initialValue) {
  
   let promise = () => {
     if (asyncFunctions.length - 1> index){
-        return asyncFunctions[index].call().then(result => {
+        return asyncFunctions[index]().then(result => {
                 index++; 
                 return new Promise(resolve => resolve(promise(reduce(initialValue, result)))); 
             });
     } else {
-        return asyncFunctions[index].call().then(result => reduce(initialValue, result));
+        return asyncFunctions[index]().then(result => reduce(initialValue, result));
       } 
   };
 
-  return promise.call();
+  return promise();
 }
 
 
