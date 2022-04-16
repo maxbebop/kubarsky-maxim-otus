@@ -16,12 +16,12 @@ var fn3 = () => new Promise(resolve => {
 
 function promiseReduce(asyncFunctions, reduce, initialValue) {
 
-  return asyncFunctions.reduce((prevFunc, currentFunc, index) => {
+  return asyncFunctions.reduce((prevFuncPromise, currentFunc, index) => {
     return currentFunc().then(currResult => {
       if (index === 0) {
         return reduce(initialValue, currResult);
       }
-      return prevFunc.then(prevResult => {
+      return prevFuncPromise.then(prevResult => {
         return reduce(prevResult, currResult);
       });
     });
@@ -31,9 +31,9 @@ function promiseReduce(asyncFunctions, reduce, initialValue) {
 
 function promiseReduce2(asyncFunctions, reduce, initialValue) {
 
-  return asyncFunctions.reduce((prevFunc, currentFunc) => {
+  return asyncFunctions.reduce((prevFuncPromise, currentFunc) => {
     return currentFunc().then(currResult => {
-      return prevFunc.then(prevResult => {
+      return prevFuncPromise.then(prevResult => {
         return reduce(prevResult, currResult);
       });
     });
