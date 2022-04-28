@@ -14,6 +14,10 @@ const getSelector = (el) => {
 function getPath(el) {
     let selectorList = [];
     while (el.nodeName.toLowerCase() != 'html') {
+        if (el.hasAttribute('id')) {
+            selectorList.unshift(`#${el.id}`);
+            break;
+        }
         let currSelector = getSelector(el);
         selectorList.unshift(currSelector);
         el = getParent(el);

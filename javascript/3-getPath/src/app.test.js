@@ -17,7 +17,7 @@ test('getSelector() return element selector', () => {
 
     document.documentElement.innerHTML = html.toString();
 
-    const result = elementPath.getSelector(document.getElementById('liHome'));
+    const result = elementPath.getSelector(document.querySelector('.active'));
     expect(result).toBe('li.active');
 
 });
@@ -26,7 +26,17 @@ test('getPath() return full element selector', () => {
 
     document.documentElement.innerHTML = html.toString();
 
-    const result = elementPath.getPath(document.getElementById('liHome'));
-    expect(result).toBe('body div div.navbar.navbar-inverse.navbar-static-top div.container ul.nav.navbar-nav li.active');
+    const result = elementPath.getPath(document.querySelector('.navbar-nav'));
+    expect(result).toBe('body div div.navbar.navbar-inverse.navbar-static-top div.container ul.nav.navbar-nav');
 
 });
+
+test('getPath() return element selector with id', () => {
+
+    document.documentElement.innerHTML = html.toString();
+
+    const result = elementPath.getPath(document.querySelector('.href-home'));
+    expect(result).toBe('#liHome a.href-home');
+
+});
+
