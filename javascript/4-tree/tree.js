@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const info = { files: [], folders: [] }
 
-const getFilesFromDirectory = async (directoryPath, rootPath) => {
+const getFilesFromDirectory = async (directoryPath) => {
     const filesInDirectory = await fs.promises.readdir(directoryPath);
     await Promise.all(
         filesInDirectory.map(async (file) => {
@@ -12,10 +12,10 @@ const getFilesFromDirectory = async (directoryPath, rootPath) => {
             const stats = await fs.promises.stat(filePath);
 
             if (stats.isDirectory()) {
-                info.folders.push(filePath.replace(rootPath, ''));
-                return getFilesFromDirectory(filePath, rootPath);
+                info.folders.push(filePath);
+                return getFilesFromDirectory(filePath);
             } else {
-                info.files.push(filePath.replace(rootPath, ''));
+                info.files.push(filePath);
                 return;
             }
         })
@@ -25,7 +25,7 @@ const getFilesFromDirectory = async (directoryPath, rootPath) => {
 const displayFiles = async () => {
 
     const dir = process.argv.slice(2)[1];
-    await getFilesFromDirectory(dir, dir)
+    await getFilesFromDirectory(dir)
     console.log(info)
 };
 
